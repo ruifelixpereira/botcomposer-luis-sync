@@ -51,8 +51,3 @@ Example:
 ```
 ./luis-import-kv-composer.sh mykeyvault /mnt/c/wb/dev/bots/poc/LuisDevSync
 ```
-
-for row in $(node index.js -d /mnt/c/wb/dev/bots/poc/LuisDevSync | jq -c '.[]'); do
-    
-    echo $row
-done

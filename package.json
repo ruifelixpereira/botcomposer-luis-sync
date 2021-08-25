@@ -1,0 +1,17 @@
+{
+  "name": "luis-sync-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ruifelixpereira",
+  "license": "ISC",
+  "bin": {
+    "export-luis": "./bin/index.js"
+  },
+  "dependencies": {
+    "yargs": "^16.2.0"
+  }
+}

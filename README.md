@@ -7,47 +7,33 @@ The ideia is to import the model into Bot Composer before it's published again, 
 
 ## Step 1. Install pre-requisites
 
-### BF Command Line Interface
-The botcomposer-luis-sync uses the **BF Command Line Interface** making it a pre-requisite. 
+### NodeJS
+This command line tool (CLI) is a node application so you need to install NodeJS first. You can downlod it from here: [NodeJS](https://nodejs.org/en/download/).
 
-You need to ahve Node.js version 14 and you can install the BF Command Line Interface with:
+## Step 2. Install the application
 
+To install the botcomposer-luis-sync app just downlod it from the GitHub [repository](https://github.com/ruifelixpereira/botcomposer-luis-sync) and run the following commands:
 ```
-npm i -g @microsoft/botframework-cli
-```
-
-### Azure CLI
-The botcomposer-luis-sync uses the Azure CLI aka **az cli** making it a pre-requisite.
-There are several options to [install](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) it.
-
-### Tool to extract LUIS keys
-The botcomposer-luis-sync uses a small tool to extract LUIS keys from the Bot Composer application files. This tool is a NodeJS program that is provided in `./bin/index.js`.
-
-For this tool to run you only need to install the package dependencies with:
-```
+cd botcomposer-luis-sync
 npm install
 ``` 
 
-## Step 2. Azure KeyVault secrets
-
-To avoid populating automation scripts with credentials and secrets, botcomposer-luis-sync uses Azure Key Vault to store the LUIS authoring key.
-
-You need to create in your own Azure Key Vault instance a new secret with name `luisAuthoringKey` and populate it with your LUIS authoring key.
-
-
-## Step 3. Invoke the provided script to collect the active version of your LUIS model
+## Step 3. Invoke the provided botcomposer-luis-sync app
 
 Just run:
 ```
-./luis-import-kv-composer.sh <keyvault_name> <bot_dir>"
+node ./bin/index.js -d <bot_dir> -e <luis_endpoint> -s <luis_key> 
 ```
 
-That needs 2 mandatory parameters:
-- *<keyvault_name>* - your Azure Key Vault instance name
+That needs 3 mandatory parameters:
 - *<bot_dir>* - your Bot Composer application directory
+- *<luis_endpoint>* - your LUIS authoring endpoint
+- *<luis_key>* - your LUIS authoring subscritpion key
 
 Example:
 
 ```
-./luis-import-kv-composer.sh mykeyvault /mnt/c/wb/dev/bots/poc/LuisDevSync
+node ./bin/index.js -d /home/rfp/wbase/dev/bots/CoreWithLanguage_1/CoreWithLanguage_1 -e https://xxxxx.cognitiveservices.azure.com/ -s xxxxxxxx
+
 ```
+

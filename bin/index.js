@@ -1,65 +1,22 @@
 #!/usr/bin/env node
 
 const yargs = require("yargs");
-const fs = require('fs');
 
-const options = yargs
- .usage("Usage: -d <botdirectory>")
- .option("d", { alias: "botdirectory", describe: "Your bot directory", type: "string", demandOption: true })
- .argv;
+const main = require('../src/main');
 
 
-/*
- * Read appsettings.json file
- */
-const botcomposerAppDir = options.botdirectory;
+const run = async() => {
 
-let settingsRaw = fs.readFileSync(botcomposerAppDir + '/settings/appsettings.json');
-let settings = JSON.parse(settingsRaw);
+    const options = yargs
+    .usage("Usage: -d <botdirectory> -e <endpoint> -s <subscriptionkey>")
+    .option("d", { alias: "botdirectory", describe: "Your bot directory", type: "string", demandOption: true })
+    .option("e", { alias: "endpoint", describe: "Your LUIS authoring endpoint", type: "string", demandOption: true })
+    .option("s", { alias: "subscriptionkey", describe: "Your LUIS authoring subscription key", type: "string", demandOption: true })
+    .argv;
 
+    await main.run(options.botdirectory, options.endpoint, options.subscriptionkey)
 
-/*
- * Read LUIS settings file
- */
-let luisRaw = fs.readFileSync(botcomposerAppDir + '/generated/luis.settings.composer.westeurope.json');
-let luisSettings = JSON.parse(luisRaw);
-const luisKeys = Object.keys(luisSettings.luis);
+    process.exit(0);
+}
 
-let luisApps = [];
-
-luisKeys.forEach(element => {
-
-    // check if it is the root bot name
-    const isRoot = element.startsWith(settings.luis.name);
-
-    // extract lang
-    const lang = element.substring(element.length-8, element.length-6) + "-" + element.substring(element.length-5, element.length-3);
-
-    // extract name
-    const name = element.substring(0, element.length-9);
-
-    // build file name
-    const file = name + "." + lang + ".lu";
-
-    // build folder
-    const folder = isRoot ? "language-understanding/" + lang : "dialogs/" + name + "/language-understanding/" + lang;
-
-    // app
-    const app = {
-        raw: element,
-        name: name,
-        isRoot: isRoot,
-        file: file,
-        lang: lang,
-        folder: folder,
-        fullPath: botcomposerAppDir + "/" + folder + "/" + file,
-        appId: luisSettings.luis[element].appId,
-        version: luisSettings.luis[element].version
-    }
-
-    luisApps.push(app);
-});
-
-console.log(JSON.stringify(luisApps));
-
-process.exit();
+run()
